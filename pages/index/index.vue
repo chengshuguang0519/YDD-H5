@@ -145,9 +145,11 @@
 			}
 		},
 		onShow() {
-			// 未读数量
+		
+			// 首页分类
 			this.ongetShopCate();
 			console.log(this.classificationlist)
+			// 未读数量
 			this.getmessagenum();
 			this.onIndex()
 		},

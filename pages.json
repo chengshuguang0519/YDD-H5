@@ -423,6 +423,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/user/extensionInfo/userList/userList",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "用户列表",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/extensionInfo/userOrder/userOrder",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "订单列表",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	// "subPackages": [{
 	// 		"root": "pages/themain",

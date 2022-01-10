@@ -1,4 +1,4 @@
-<template>
+	<template>
 	<view class="goods">
 		<!-- 轮播 -->
 		<view class="goods_content">

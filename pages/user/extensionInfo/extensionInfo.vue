@@ -8,11 +8,11 @@
 					<img :src="user.headimg" alt="">
 					<view class="user-name">{{user.nickname}}</view>
 					<view class="user-list">
-						<view>
+						<view @click="goUserList">
 							<text>用户数量</text>
 							<text>{{infoobj.num}}位</text>
 						</view>
-						<view>
+						<view @click="goUserOrder">
 							<text>推广佣金</text>
 							<text>{{infoobj.total}}元</text>
 						</view>
@@ -71,6 +71,7 @@
 				messagelist: '统计：您的下级用户订单为0单，总佣金为0元。',
 				num: 0,
 				list: [],
+				// userList:[],
 				infoobj:{}
 			}
 		},
@@ -92,6 +93,12 @@
 				}).then(res => {
 					console.log(res,'num')
 					this.num = res.data.length
+					// res.data.forEach(v=>{
+					// 	if(v.total>0){
+					// 		this.userList.push(v)
+					// 	}
+					// })
+					// console.log(this.userList,'userList')
 				})
 			},
 			loadpromoteInfo(){
@@ -114,7 +121,22 @@
 						this.list = res.data
 					}
 				})
+			},
+			goUserList(){
+				uni.navigateTo({
+					url:'userList/userList'
+				})
+			},
+			goUserOrder(){
+				console.log(this.user.type,'user')
+				if(this.user.type == 4){
+					uni.navigateTo({
+						url:'userOrder/userOrder'
+					})
+				}
+				
 			}
+			
 		}
 	}
 </script>

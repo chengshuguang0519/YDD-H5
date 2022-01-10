@@ -18,7 +18,7 @@
 					</view>
 					<view class="xian"></view>
 					<view class="cell2">
-						<view class="text">推广用户:{{infoobj.num}}位</view>
+						<view class="text" @click="goUserList">推广用户:{{infoobj.num}}位</view>
 						<view class="text">待发放佣金: ¥ {{infoobj.pendingWithdrawal}}</view>
 					</view>
 				</view>
@@ -101,6 +101,11 @@
 			goWithdrawal(){
 				uni.navigateTo({
 					url:'/pages/user/the_wallet/withdrawal_topup/index?type=2'
+				})
+			},
+			goUserList(){
+				uni.navigateTo({
+					url:'../extensionInfo/userList/userList'
 				})
 			}
 			

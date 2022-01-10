@@ -306,7 +306,6 @@
 				})
 			},
 			goPay() {
-
 				var _this = this;
 				if (this.ids) {
 					let descArr = []
@@ -477,7 +476,7 @@
 							})
 						}
 					})
-				} else if (this.good_type == 1) {
+				} else if (this.good_type == 1 ||this.good_type == 3) {
 					this.$u.post('/goods/postPrice', this.postData).then(res => {
 						console.log(res, 'postDate')
 						if (res.code == 1) {

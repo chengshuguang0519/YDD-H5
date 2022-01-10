@@ -49,7 +49,16 @@
 						<view class="item_text_content">
 							<view>{{r.title}}</view>
 							<view>{{r.tagsname}}</view>
-							<view><text>￥{{r.price}}</text><text>/张</text></view>
+							<view>
+								<text>零售价：</text>
+								<text>￥{{r.price}}</text>
+								<text>/张</text>
+							</view>
+							<view v-if="type==2||type==3||type==4||type==5">
+								<text>出厂价：</text>
+								<text>￥{{r.market_price}}</text>
+								<text>/张</text>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -114,12 +123,14 @@
 				listdata:[],
 				title:'行业筛选',
 				edu_id:'',
-				msnum:''
+				msnum:'',
+				type:''
 			}
 		},
 		onLoad() {
 			this.getclassification();
 			this.geteducationGoodsList()
+			this.type = uni.getStorageSync('userinfo').type
 		},
 		onShow() {
 			this.getmessagenum()
@@ -332,7 +343,7 @@
 				
 				.list_item{
 					width: 49%;
-					height: 498rpx;
+					// height: 498rpx;
 					background-color: #FFFFFF;
 					margin-bottom: 20rpx;
 					border-radius: 10rpx;
@@ -349,21 +360,36 @@
 							font-weight: 700;
 						}
 						view:nth-child(2){
+							height: 78rpx;
 							font-size: 24rpx;
 							color: #999899;
 							padding: 12rpx 0;
+							 text-overflow: -o-ellipsis-lastline;
+							  overflow: hidden;
+							  text-overflow: ellipsis;
+							  display: -webkit-box;
+							  -webkit-line-clamp: 2;
+							  line-clamp: 2;
+							  -webkit-box-orient: vertical;
 						}
-						view:nth-child(3){
+						view:nth-child(3),
+						view:nth-child(4){
 							text:nth-child(1){
+								font-size: 24rpx;
+								color: #999899;
+							}
+							text:nth-child(2){
 								font-size: 32rpx;
 								color: #F73622;
 								font-weight: 700;	
 							}
-							text:nth-child(2){
+							text:nth-child(3){
 								font-size: 24rpx;
 								color: #999899;
 							}
 						}
+						
+						
 					}
 				}
 			}

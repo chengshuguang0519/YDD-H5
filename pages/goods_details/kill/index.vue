@@ -15,9 +15,23 @@
 			<view class="goods_one">
 				<view>{{dataobj.title}}</view>
 				<view>
-					<view>
+					<!-- <view>
 						<view><text>￥{{dataobj.market_price}}</text><text>/张</text></view>
 						<view>￥{{dataobj.price}}/张</view>
+					</view> -->
+					<view>
+						<view>
+							<text>零售价：</text>
+							<text>￥{{Number(dataobj.price).toFixed(2)}}</text>
+							<!-- <text>零售价：￥{{getobj.price}}</text>
+							<text>/张</text>
+							<text>出厂价：￥{{getobj.market_price}}</text> -->
+						</view>
+						<view v-if="type==2||type==3||type==4||type==5">
+							<text>出厂价：</text>
+							<text>￥{{Number(dataobj.market_price).toFixed(2)}}</text>
+						</view>
+						<!-- <view>￥0.20/张</view> -->
 					</view>
 					<view>销量{{dataobj.sale}}</view>
 				</view>
@@ -159,7 +173,8 @@
 				datacommentunm:0,
 				datacomment:[],
 				show:false,
-				unmvule:1
+				unmvule:1,
+				type:''
 			}
 		},
 		components: {
@@ -170,6 +185,7 @@
 			this.onScoreGoodDetail();
 			this.onScoreComment();
 			this.getfea();
+			this.type = uni.getStorageSync('userinfo').type
 		},
 		onShow() {
 			this.showgetDefaultAddress()
@@ -363,47 +379,100 @@
 				color: #333333;
 				font-weight: 700;
 			}
-
+			
 			&>view:nth-child(2) {
 				display: flex;
 				justify-content: space-between;
 				padding-top: 42rpx;
 				align-items: flex-end;
 				padding-bottom: 32rpx;
-
+			
 				&>view:nth-child(1) {
 					display: flex;
 					align-items: flex-end;
-
+					
 					&>view:nth-child(1) {
+						margin-right: 90rpx;
 						&>text:nth-child(1) {
-							font-size: 44rpx;
-							color: #E94726;
-							font-weight: 700;
-						}
-
-						&>text:nth-child(2) {
 							font-size: 24rpx;
 							color: #999899;
+						}
+			
+						&>text:nth-child(2) {
+							font-size: 30rpx;
+							color:#E94726;
 							font-weight: 700;
 						}
 					}
-
+			
+					// &>view:nth-child(2) {
+					// 	font-size: 26rpx;
+					// 	color: #999899;
+					// 	font-weight: 500;
+					// 	padding-left: 32rpx;
+					// 	text-decoration: line-through;
+					// }
 					&>view:nth-child(2) {
-						font-size: 26rpx;
-						color: #999899;
-						font-weight: 500;
-						padding-left: 32rpx;
-						text-decoration: line-through;
+						&>text:nth-child(1) {
+							font-size: 24rpx;
+							color: #999899;
+						}
+					
+						&>text:nth-child(2) {
+							font-size: 30rpx;
+							color:#E94726;
+							font-weight: 700;
+						}
 					}
+					
 				}
-
+			
 				&>view:nth-child(2) {
 					font-size: 24rpx;
 					color: #999899;
 					font-weight: 500;
 				}
 			}
+			// &>view:nth-child(2) {
+			// 	display: flex;
+			// 	justify-content: space-between;
+			// 	padding-top: 42rpx;
+			// 	align-items: flex-end;
+			// 	padding-bottom: 32rpx;
+
+			// 	&>view:nth-child(1) {
+			// 		display: flex;
+			// 		align-items: flex-end;
+
+			// 		&>view:nth-child(1) {
+			// 			&>text:nth-child(1) {
+			// 				font-size: 44rpx;
+			// 				color: #E94726;
+			// 				font-weight: 700;
+			// 			}
+
+			// 			&>text:nth-child(2) {
+			// 				font-size: 24rpx;
+			// 				color: #999899;
+			// 				font-weight: 700;
+			// 			}
+			// 		}
+
+			// 		&>view:nth-child(2) {
+			// 			font-size: 26rpx;
+			// 			color: #999899;
+			// 			font-weight: 500;
+			// 			padding-left: 32rpx;
+			// 			text-decoration: line-through;
+			// 		}
+			// 	}
+
+			// 	&>view:nth-child(2) {
+			// 		font-size: 24rpx;
+			// 		color: #999899;
+			// 		font-weight: 500;
+			// 	}
+			// }
 
 			&>view:nth-child(3) {
 				display: flex;

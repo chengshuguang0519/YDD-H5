@@ -11,8 +11,20 @@
 							</view>
 							<view class="item_text_content">
 								<view>{{i.title}}</view>
-								<view><text v-for="(r,index) in i.tags" :key="index">{{r}}</text></view>
-								<view><text>￥{{i.price}}</text><!-- <text>/张</text> --></view>
+
+								<view>
+									<text v-for="(r,index) in i.tags" :key="index">{{r}}11111111111</text></view>
+								<view>
+									<text >零售价：</text>
+									<text>￥{{i.price}}</text>
+								<!-- 	<text>零售价：￥{{i.price}}</text>
+									<text>/张</text>
+									<text>出厂价：￥{{i.market_price}}</text> -->
+								</view>
+								<view v-if="type==2||type==3||type==4||type==5">
+									<text>出厂价：</text>
+									<text>￥{{i.market_price}}</text>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -32,7 +44,8 @@
 			return {
 				id:'',
 				index:0,
-				getlist:[]
+				getlist:[],
+				type:''
 			}
 		},
 		components: {
@@ -42,6 +55,7 @@
 			this.id = opent.id
 			this.index = opent.index
 			this.getloadData();
+			this.type = uni.getStorageSync('userinfo').type
 		},
 		methods: {
 			getloadData(){
@@ -119,6 +133,9 @@
 </script>
 
 <style lang="less">
+	page{
+		background-color: #F7F7F7;
+	}
 	.collection{
 		height: calc(100vh);
 		overflow: hidden;
@@ -145,7 +162,7 @@
 				width: 49%;
 				// height: 498rpx;
 				background-color: #FFFFFF;
-				padding-bottom: 20rpx;
+				padding-bottom: 30rpx;
 				margin-bottom: 20rpx;
 				border-radius: 10rpx;
 				overflow: hidden;
@@ -154,7 +171,7 @@
 					width: 100%;
 				}
 				.item_text_content{
-					padding: 22rpx 16rpx;
+					padding: 24rpx 16rpx;
 					view:nth-child(1){
 						font-size: 28rpx;
 						color: #323333;
@@ -167,23 +184,51 @@
 						white-space: nowrap;
 						text-overflow: ellipsis;
 						overflow: hidden;
+						margin-top: 20rpx;
 						text{
 							padding-right: 10rpx;
 						}
 					}
-					view:nth-child(3){
+					view:nth-child(3),
+					view:nth-child(4){
 						position: absolute;
 						bottom: 10rpx;
 						text:nth-child(1){
+							font-size: 24rpx;
+							color: #999899;
+						}
+						text:nth-child(2){
 							font-size: 32rpx;
 							color: #F73622;
 							font-weight: 700;	
 						}
-						text:nth-child(2){
+						text:nth-child(3){
 							font-size: 24rpx;
 							color: #999899;
 						}
 					}
+					view:nth-child(3){
+						bottom: 40rpx;
+					}
+					view:nth-child(4){
+						bottom: 5rpx;
+					}
+					// view:nth-child(3){
+					// 	position: absolute;
+					// 	display: flex;
+					// 	bottom: 10rpx;
+					// 	text:nth-child(1){
+					// 		font-size: 20rpx;
+					// 		color: #F73622;
+					// 		font-weight: 700;
+							
+					// 	}
+					// 	text:nth-child(2){
+					// 		font-size: 20rpx;
+					// 		font-weight: 700;
+					// 		color: #F73622;
+					// 	}
+					// }
 				}
 			}
 		}

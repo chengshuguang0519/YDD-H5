@@ -16,8 +16,9 @@
 				<view>{{dataobj.title}}</view>
 				<view>
 					<view>
-						<view><text>￥{{dataobj.market_price}}</text><text>/张</text></view>
-						<view>￥{{dataobj.price}}/张</view>
+						<!-- <view><text>￥{{dataobj.market_price}}</text><text>/张</text></view> -->
+						<view><text>{{dataobj.price}}积分</text></view>
+						<view>￥{{dataobj.market_price}}</view>
 					</view>
 					<view>销量{{dataobj.sale}}</view>
 				</view>
@@ -193,6 +194,7 @@
 						console.log(res.data,'555')
 						this.collent = res.data.is_collect	
 						this.dataobj = res.data
+						this.dataobj.price = Number(this.dataobj.price).toFixed(0)
 					}
 				})
 			},
@@ -373,7 +375,7 @@
 
 					&>view:nth-child(1) {
 						&>text:nth-child(1) {
-							font-size: 44rpx;
+							font-size: 40rpx;
 							color: #E94726;
 							font-weight: 700;
 						}

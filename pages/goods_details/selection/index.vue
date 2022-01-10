@@ -16,7 +16,16 @@
 				<view>{{getobj.title}}</view>
 				<view>
 					<view>
-						<view><text>￥{{getobj.price}}</text><!-- <text>/张</text> -->
+						<view>
+							<text>零售价：</text>
+							<text>￥{{getobj.price.toFixed(2)}}</text>
+							<!-- <text>零售价：￥{{getobj.price}}</text>
+							<text>/张</text>
+							<text>出厂价：￥{{getobj.market_price}}</text> -->
+						</view>
+						<view v-if="type==2||type==3||type==4||type==5">
+							<text>出厂价：</text>
+							<text>￥{{getobj.market_price.toFixed(2)}}</text>
 						</view>
 						<!-- <view>￥0.20/张</view> -->
 					</view>
@@ -188,6 +197,18 @@
 							</div>
 						</view>
 					</view>
+					<!-- <view class="cont_item" v-if="activeSelect.sticky_action">
+						<view class="title">粘口</view>
+						<view class="selectAll">
+							<div class="select" v-if="activeSelect.sticky_action"
+								@click="showSelect(true,1,getobj.spec.sticky_action,'sticky_action')">
+								<p>{{activeSelect.sticky_action[0].name?activeSelect.sticky_action[0].name : getobj.spec.sticky_action[0].num?getobj.spec.sticky_action[0].num:getobj.spec.sticky_action[0].name}}
+								</p>
+								<p>↓</p>
+							</div>
+							
+						</view>
+					</view> -->
 					<view class="cont_item" v-if="activeSelect.print_method">
 						<view class="title">单双面</view>
 						<view class="selectAll">
@@ -427,7 +448,8 @@
 				specsshow:false,
 				goPayt:'',
 				postData:{},
-				OtherData:{}
+				OtherData:{},
+				type:''
 			}
 		},
 		computed: {
@@ -445,12 +467,15 @@
 			this.getfea();
 			this.getaddress();
 			console.log(this.selectList,this.twoSerect,'selectList')
+			console.log(uni.getStorageSync('userinfo').type,'userinfo')
+			this.type = uni.getStorageSync('userinfo').type
+			
 		},
 		methods: {
 
 			//工艺选中
 			ac(i, item) {
-				console.log(i,item)
+				console.log(i,item,this.arr_,this.getobj.good_type)
 				this.goodsMessage.spec.craft.push(item)
 				if (i == 0 || i == 1 || i == 2) {
 					this.arr_[i].isactive = !this.arr_[i].isactive
@@ -459,13 +484,30 @@
 					this.arr_[i].active = false
 					this.arr_[i].isactive = !this.arr_[i].isactive
 				}
-				if (this.arr_[6].isactive) {
-					this.arr_[5].isactive = !this.arr_[6].isactive
+				if(this.arr_.length>6){
+					if (this.arr_[6].isactive) {
+						this.arr_[5].isactive = !this.arr_[6].isactive
+					}
+					if (this.arr_[5].isactive) {
+						this.arr_[6].isactive = !this.arr_[5].isactive
+					}
 				}
-				if (this.arr_[5].isactive) {
-					this.arr_[6].isactive = !this.arr_[5].isactive
+				// if (this.arr_[6].isactive) {
+				// 	this.arr_[5].isactive = !this.arr_[6].isactive
+				// }
+				// if (this.arr_[5].isactive) {
+				// 	this.arr_[6].isactive = !this.arr_[5].isactive
+				// }
+				if(this.getobj.good_type == 12){
+					this.getPrice(3)
+				}else if(this.getobj.good_type == 4){
+					this.getPrice(2)
+				}else if(this.getobj.good_type == 3){
+					this.getPrice(6)
+				}else{
+					this.getPrice(1)
 				}
-				this.getPrice(1)
+				// this.getPrice(1)
 			},
 			// 选中自定义价格, 隐藏下拉选价格
 			hiddenSelect(key) {
@@ -479,17 +521,36 @@
 						.numbers[0].num
 				}
 				this.$forceUpdate()
-				this.getPrice(1)
+				// this.getPrice(1)
+				if(this.getobj.good_type == 12){
+					this.getPrice(3)
+				}else if(this.getobj.good_type == 4){
+					this.getPrice(2)
+				}else if(this.getobj.good_type == 3){
+					this.getPrice(6)
+				}else{
+					this.getPrice(1)
+				}
 			},
 			showSelect1() { //二级选择弹窗
 				this.selectShow1 = true
 			},
 			confirm1(e) {
 				this.twoActive = e[0]
-				this.getPrice(1)
+				// this.getPrice(1)
+				if(this.getobj.good_type == 12){
+					this.getPrice(3)
+				}else if(this.getobj.good_type == 4){
+					this.getPrice(2)
+				}else if(this.getobj.good_type == 3){
+					this.getPrice(6)
+				}else{
+					this.getPrice(1)
+				}
 			},
 			showSelect(b, i, arr, key) { //打开规格选中弹窗
 				let selectArr = []
+
 				arr.forEach(item => {
 					if (key == 'paper') {
 						selectArr.push({
@@ -508,6 +569,15 @@
 						this.goodsMessage.spec.number = item.num?item.num:item.name
 						this.goodsMessage.special.number = item.num?item.num:item.name
 					}
+					// if (key == 'sticky_action') {
+						
+					// 	selectArr.push({
+					// 		value: item.id,
+					// 		label: item.name
+					// 	})
+						
+					// }
+					
 					if (key == 'print_method') {
 						selectArr.push({
 							value: item.id,
@@ -604,6 +674,8 @@
 					this.getPrice(3)
 				}else if(this.getobj.good_type == 4){
 					this.getPrice(2)
+				}else if(this.getobj.good_type == 3){
+					this.getPrice(6)
 				}else{
 					this.getPrice(1)
 				}
@@ -650,6 +722,8 @@
 					this.getPrice(3)
 				}else if(this.getobj.good_type == 4){
 					this.getPrice(2)
+				}else if(this.getobj.good_type == 3){
+					this.getPrice(6)
 				}else{
 					this.getPrice(1)
 				}
@@ -682,17 +756,6 @@
 										res.data.spec.craft[i].height = ''
 									}
 								_this.arr_.push(res.data.spec.craft[i])
-								// if (res.data.spec.craft.length > 0) {
-								// 	res.data.spec.craft.forEach(function(value,j) {
-								// 		value.active = false;
-								// 		value.isactive = false;
-								// 		if(value.type == 3){
-								// 			value.width = ''
-								// 			value.height = ''
-								// 		}
-								// 		_this.arr_.push(value)
-								// 	})
-								// }
 							}
 							
 							for (let item in res.data.spec) {
@@ -712,6 +775,7 @@
 							this.goodsMessage.good_id = res.data.id
 							this.goodssList = res.data.good_type
 							this.collent = res.data.is_collect
+							this.activeSelect.sticky_action = res.data.sticky_action
 							for (let i = 0; i < res.data.spec.craft.length; i++) {
 								if (res.data.spec.craft[i].specs.length > 0) {
 									res.data.spec.craft[i].specs.forEach(function(value, j) {
@@ -756,6 +820,7 @@
 							bag_side_width: '',
 						}
 						this.getobj = res.data
+						this.getobj.spec.sticky_action = []
 						this.spec = res.data.spec
 						this.getobjprice = res.data.price
 					}else if(res.code == 111){
@@ -831,7 +896,10 @@
 					this.getPrice(2, false, 1)
 				} else if(this.getobj.good_type == 12){
 					this.goPayt = text
-					this.getPrice(3, true, 1)
+					this.getPrice(3, false, 1)
+				}else if(this.getobj.good_type == 3){
+					this.goPayt = text
+					this.getPrice(6, false, 1)
 				}else{
 					this.goPayt = text
 					this.getPrice(1, false, 1)
@@ -881,6 +949,9 @@
 				} else if(this.getobj.good_type == 12){
 					this.goPayt = text
 					this.getPrice(3, true)
+				}else if(this.getobj.good_type == 3){
+					this.goPayt = text
+					this.getPrice(6, true, 1)
 				}else{
 					this.goPayt = text
 					this.getPrice(1, true)
@@ -1112,7 +1183,8 @@
 										}
 								}
 						})
-					}else{
+					}
+					else{
 						this.OtherData ={
 							good_id: this.goodsMessage.good_id,
 							good_type: this.goodsMessage.good_type,
@@ -1223,10 +1295,7 @@
 										}
 									}
 								})
-					}
-					
-					}
-					else if (type == 2) {
+					}}else if (type == 2) {
 						let data = {
 							good_id: this.getobj.id,
 							good_type: this.getobj.good_type,
@@ -1401,7 +1470,141 @@
 								}
 							}
 						})
-					}else{
+						
+					//手提袋，商品类型type == 3
+					}else if(type == 6){
+						this.postData  = {
+							bag_mouth_height:40,
+							bag_side_width:15,
+							craft:craft,
+							// design_file: [""],
+							good_id: this.getobj.id,
+							good_type: 3,
+							material_id: _this.activeSelect['material'] ? _this.activeSelect['material'].id ? _this
+							.activeSelect['material'].id : _this.getobj.spec.material[0].id : "",
+							// specs[0].
+							material_weight_id:_this.twoActive.value ? _this.twoActive.value : _this.getobj.spec.material[
+							0].id, 
+							number:  _this.activeSelect['numbers'] ? _this.activeSelect['numbers'].active ? _this
+							.activeSelect['numbers'].name ? _this.activeSelect['numbers'].name : _this.getobj.spec
+							.numbers[0].num : _this.activeSelect['numbers'].num : '',
+							paper_spec_id: _this.activeSelect['paper'] ? _this.activeSelect['paper'].id ? _this
+							.activeSelect['paper'].id : _this.getobj.spec.paper[0].id : '',
+							pnumbers: this.pnumbers(),
+							print_color_id: _this.activeSelect['print_color'] ? _this.activeSelect['print_color'].id ?
+							_this.activeSelect['print_color'].id : _this.getobj.spec.print_color[0].id : '',
+							print_type: 1,
+							// sample_file: [""],
+							size_height:  _this.activeSelect['paper'] ? _this.activeSelect['paper'].active ? '' : _this
+							.activeSelect['paper'].min : '',
+							size_thickness: "0",
+							size_type: 2,
+							size_width: _this.activeSelect['paper'] ? _this.activeSelect['paper'].active ? '' : _this
+							.activeSelect['paper'].max : "",
+							spec_id: 0,
+							spec_number: "",
+							spot_color_num:  _this.activeSelect['spot_color'] ? _this.activeSelect['spot_color'].id ? _this
+							.activeSelect['spot_color'].id : _this.getobj.spec.spot_color[0].id : '',
+							sticky_action_id: 13,
+							type: 3
+						}
+						this.$u.post('goods/postPrice',this.postData).then(res => {
+								console.log(res, '66')
+								if(res.code == 999){
+										uni.showToast({
+											title:res.message,
+											icon:'none',
+											duration:3000
+										})
+									return;
+								}
+								if (!pay&&add ==1) {
+									console.log(res.data[0].this.spec.snap, '加入购物车')
+									let addData = {
+										good_id: this.getobj.id,
+										spec: '',
+										num: _this.activeSelect['numbers'].name ? _this.activeSelect['numbers'].name :
+											_this.getobj.spec.numbers[0].num,
+										spec_id: 0,
+										type: 1,
+										good_type: this.getobj.good_type,
+									}
+									addData.spec = JSON.stringify(res.data[0].this)
+									console.log(res.data[0].this.spec.snap, '888')
+									let number = res.data[0].this.number
+									let pnumber = res.data[0].this.snapSpec.pnumber
+									if (!pay&&res.data[0].this.spec.snap?res.data[0].this.spec.snap.length>=1:res.data[0].this.snapSpec.craft.length>=1 ) {
+										this.$u.post(this.api.addGoodsCart, addData).then(res => {
+											if (res.code == 1) {
+												this.$refs.uToast1.show({
+													title: '加入成功',
+													icon: 'none',
+												})
+											}else{
+												this.$refs.uToast1.show({
+													title: res.msg,
+													icon: 'none',
+												})
+											}
+										})
+										
+									} else {
+										this.$refs.uToast1.show({
+											title: '请选择工艺',
+											icon: 'none',
+										})
+										}
+										return;
+									}
+									if (res.code == 1) {
+										console.log('1111')
+										this.yixuanText = ''
+										this.sumPrice = res.data[0].this.sumPrice
+										this.yixuanText += res.data[0].this.number
+										// for (let i = 0; i < res.data[0].this.spec.snap.length; i++) {
+										// 	if (this.yixuanText == '') {
+										// 		this.yixuanText += res.data[0].this.spec.snap[i]
+										// 	} else {
+										// 		this.yixuanText += ' ' + res.data[0].this.spec.snap[i]
+										// 	}
+										// }
+										if (pay) {
+										let	buyData = {
+												good_id: this.getobj.id,
+												spec: '',
+												number: 1,
+												spec_id: 0,
+												good_type: this.getobj.good_type,
+											}
+											buyData.spec = JSON.stringify(res.data[0].this);
+											// buyData.special = JSON.stringify(dataa)
+											uni.setStorageSync('payObj', JSON.stringify(buyData))
+											//m
+											this.$u.post(this.api.buynow, buyData).then(res => {
+												if (res.code == 1) {
+													// uni.navigateTo({
+													// 	url: '/pages/order/submit_orders/index?option=' +
+													// 		JSON
+													// 		.stringify(res.data) + '&specId=0'+'&data='+JSON.stringify(this.postData)+'&buyData='+JSON.stringify(buyData),
+													// })
+													if(isWeixin()){
+														uni.navigateTo({
+															url: '/pages/order/submit_orders/index?option=' +
+																JSON
+																.stringify(res.data) + '&specId=0'+'&data='+JSON.stringify(this.postData)+'&buyData='+JSON.stringify(buyData),
+														})
+													}else{
+														uni.navigateTo({
+															url:'../GoWatch/GoWatch'
+														})
+													}
+												}
+											})
+										}
+								}
+						})
+					}
+					else{
 						this.$u.post(this.api.NormalSpec, {
 							good_type: this.getobj.good_type,
 							spec_name: this.specStr,
@@ -1856,28 +2059,41 @@
 				&>view:nth-child(1) {
 					display: flex;
 					align-items: flex-end;
-
+					
 					&>view:nth-child(1) {
+						margin-right: 50rpx;
 						&>text:nth-child(1) {
-							font-size: 44rpx;
-							color: #E94726;
-							font-weight: 700;
+							font-size: 24rpx;
+							color: #999899;
 						}
 
 						&>text:nth-child(2) {
-							font-size: 24rpx;
-							color: #999899;
+							font-size: 30rpx;
+							color:#E94726;
 							font-weight: 700;
 						}
 					}
 
+					// &>view:nth-child(2) {
+					// 	font-size: 26rpx;
+					// 	color: #999899;
+					// 	font-weight: 500;
+					// 	padding-left: 32rpx;
+					// 	text-decoration: line-through;
+					// }
 					&>view:nth-child(2) {
-						font-size: 26rpx;
-						color: #999899;
-						font-weight: 500;
-						padding-left: 32rpx;
-						text-decoration: line-through;
+						&>text:nth-child(1) {
+							font-size: 24rpx;
+							color: #999899;
+						}
+					
+						&>text:nth-child(2) {
+							font-size: 30rpx;
+							color:#E94726;
+							font-weight: 700;
+						}
 					}
+					
 				}
 
 				&>view:nth-child(2) {

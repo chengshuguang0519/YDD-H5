@@ -26,7 +26,8 @@
 							{{categorylist[item_index].name}}
 						</view>
 						<view class="right_grid" >
-							<view class="grid" v-for="(i,index) in categorylist[item_index].list" v-if="index < inde+'right_index' || index < right_index" :key="index" @click="onshop(i,index)">
+							<!-- v-if="index < inde+'right_index' || index < right_index" -->
+							<view class="grid" v-for="(i,index) in categorylist[item_index].list"  :key="index" @click="onshop(i,index)">
 								<view class="grid_image">
 									<image :src="i.images"></image>
 								</view>
@@ -35,11 +36,11 @@
 								</view>
 							</view>
 						</view>
-						<block v-if="categorylist[item_index].list.length != 0">
+						<!-- <block v-if="categorylist[item_index].list.length != 0">
 							<view class="right_load" v-if="right_index == 3">
 								<view class="load" @click="an(i)"><text>点击查看更多</text><u-icon name="arrow-down"></u-icon></view>
 							</view>
-						</block>
+						</block> -->
 					</view>
 				</scroll-view>
 			</view>
@@ -183,7 +184,7 @@
 				padding: 16rpx 18rpx;
 				.right_itme{
 					padding: 12rpx 0;
-					border-bottom: 2rpx solid #FFFFFF;
+					// border-bottom: 2rpx solid #FFFFFF;
 					.right_item_title{
 						color: #333333;
 						font-weight: bold;
